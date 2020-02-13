@@ -10,8 +10,8 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author settings
 author: James Xuoi # add your name
-author-pic: adam-face.jpg
-about-author: My name is James Xuoi. I’m a full-time adventure travel blogger and photographer who’s been exploring the world for over 2 years.
+author-pic: #adam-face.jpg
+about-author: My name is James Xuoi. I’m a full-time machine learning engineer and roboticist who’s been working in AI & Data Science for over 2 years.
 
 # Contact links
 email: jxuoi2211@gmail.com# Add your Email address
