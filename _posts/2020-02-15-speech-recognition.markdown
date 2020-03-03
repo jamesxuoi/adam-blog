@@ -54,11 +54,9 @@ This data was collected by Google and released under a CC BY license, and you ca
 ![speech_recognition_overview]({{site.baseurl}}/assets/img/post_1/speech_recognition_overview.jpg)
 <center>Figure 1: An overview of data distribution</center>
 
-> Download and Extract
+> **Step 1: Download and Extract**
 
-Download the speech-commands data set from:
-https://storage.cloud.google.com/download.tensorflow.org/data/speech_commands_v0.0.2.tar.gz
-
+Download the speech-commands data set from [here.](https://storage.cloud.google.com/download.tensorflow.org/data/speech_commands_v0.0.2.tar.gz)
 
 Extract tar.gz file
 ``` python
@@ -68,20 +66,145 @@ tar.extractall(path='extracting_folder_path')
 tar.close()
 ```
 
+> **Step 2: Data Analytics and Visualisation**
 
-> Data Analytics and Visualisation
+After setting up a data pipeline to load all '.wav' files, I built a function to choose randomly an audio for data analysing and visualising purposes. (You can find the project code on my [Github page.](https://github.com/jamesxuoi/projects/tree/master/projects/Speech%20Recognition/notes))
 
-After setting up a data pipeline to load all '.wav' files, an audio file is randomly chosen for data analysing and visualising purposes.
-
-In this case, 'two' is chosen. Let's quickly listen to it!
+In this case, 'two' is randomly chosen. Let's quickly listen to it!
 
 <audio src="{{site.baseurl}}/assets/media/617aeb6c_nohash_3.wav" controls preload></audio>
 
-What you have just heard is a sound of 16 000 Hz frequencies. According to the official frequency chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music's frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of 'Two' in various forms.
+What you have just heard is a sound of 16 000 Hz frequencies. According to the Official Frequency Chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music's frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of 'Two' in various forms.
 
-**Sound Wave Form:** This is the most common seen digital signal form, whenever a song is played then the screen of your device will automatically show the audio sound wave's amplitude varies through time.
+**Sound Wave Form:** This is the most common seen digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave's amplitude varies through time.
+
+``` python
+from scipy.io import wavfile
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+path = 'audio_file'
+fs, signals = wavfile.read(path)
+def plot_sine_wav(file_path):
+    time = np.linspace(0, len(signals)/fs, num=len(signals))
+    plt.plot(time,signals)
+    plt.xlabel('Time in Sec')
+    plt.ylabel('Amplitude')
+    plt.title('Sound Waveform')
+    plt.show()
+plot_sine_wav(path)
+```
 
 ![Sound_Wave_Form]({{site.baseurl}}/assets/img/post_1/1.jpg)
 <center>Figure 2: Sound Wave Form's amplitude varies through time</center>
 
-*to be continued...*
+**Periodogram Power Spectrum:** describes the distribution of power into frequency components composing that signal. In signal processing, a periodogram is an estimate of the spectral density of a signal. One purpose of estimating the spectral density is to detect any periodicities in the data, by observing peaks at the frequencies corresponding to these periodicities.
+
+``` python
+from spectrum import Periodogram
+plt.figure(figsize=(20,10))
+plt.rcParams.update({'font.size': 22})
+p = Periodogram(signals, fs)
+p()
+p.plot(marker='o')
+```
+
+![Periodogram Power Spectrum]({{site.baseurl}}/assets/img/post_1/2.jpg)
+
+**Power Spectral Density:** The power spectrum of a time serie describes the distribution of power into frequency components composing that signal.
+
+``` python
+from scipy import signal
+f, Pxx_spec = signal.welch(signals, fs, 'flattop', 1024, scaling='spectrum')
+plt.figure(figsize=(20,10))
+plt.rcParams.update({'font.size': 22})
+plt.semilogy(f, np.sqrt(Pxx_spec))
+plt.xlabel('Frequency [Hz]')
+plt.ylabel('Power [V RMS]')
+plt.title('Power Spectral Density')
+plt.show()
+```
+
+![Power Spectral Density]({{site.baseurl}}/assets/img/post_1/2.jpg)
+
+**Fast Fourier Transform:** The "Fast Fourier Transform" (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts a signal into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the "Discrete Fourier Transformation" (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.
+
+``` python
+def custom_fft(y, fs):
+    T = 1.0 / fs
+    N = y.shape[0]
+    yf = fft(y)
+    xf = np.linspace(0.0, 1.0/(2.0*T), N//2)
+    vals = 2.0/N * np.abs(yf[0:N//2]) 
+    return xf, vals
+```
+
+``` python
+xf, vals = custom_fft(signals, fs)
+plt.figure(figsize=(20,10))
+plt.rcParams.update({'font.size': 22})
+plt.title('FFT of speaker of ' +'Two')
+plt.plot(xf, vals)
+plt.xlabel('Frequency [Hz]')
+plt.grid()
+plt.show()
+```
+
+![Fast Fourier Transform]({{site.baseurl}}/assets/img/post_1/4.jpg)
+
+**Spectrogram:** is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams. A spectrogram is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams.
+
+``` python
+def log_specgram(audio, sample_rate, window_size=20,
+                 step_size=10, eps=1e-10):
+    nperseg = int(round(window_size * fs / 1e3))
+    noverlap = int(round(step_size * fs / 1e3))
+    freqs, times, spec = signal.spectrogram(audio,
+                                    fs=fs,
+                                    window='hann',
+                                    nperseg=nperseg,
+                                    noverlap=noverlap,
+                                    detrend=False)
+    return freqs, times, np.log(spec.T.astype(np.float32) + eps)
+```
+``` python
+freqs, times, spectrogram = log_specgram(signals, fs)
+
+fig = plt.figure(figsize=(20,10))
+plt.rcParams.update({'font.size': 19})
+ax1 = fig.add_subplot(211)
+ax1.set_title('Raw wave of '+'Two')
+ax1.set_ylabel('Amplitude')
+ax1.plot(np.linspace(0, fs/len(signals), fs), signals)
+
+ax2 = fig.add_subplot(212)
+ax2.imshow(spectrogram.T, aspect='auto', origin='lower', 
+           extent=[times.min(), times.max(), freqs.min(), freqs.max()])
+ax2.set_yticks(freqs[::16])
+ax2.set_xticks(times[::16])
+ax2.set_title('Spectrogram of '+'two')
+ax2.set_ylabel('Freqs in Hz')
+ax2.set_xlabel('Seconds')
+```
+
+![Spectrogram]({{site.baseurl}}/assets/img/post_1/5.jpg)
+
+**Mel-frequency cepstrum Spectrogram:** is a representation of the short-term power spectrum of 'two', based on a linear cosine transform of a log power spectrum on a nonlinear mel scale of frequency.
+
+``` python
+import librosa
+import librosa.display
+y, sr = librosa.load(path)
+S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
+# Convert to log scale (dB). We'll use the peak power (max) as reference.
+log_S = librosa.power_to_db(S, ref=np.max)
+plt.figure(figsize=(20,10))
+plt.rcParams.update({'font.size': 22})
+librosa.display.specshow(log_S, sr=sr, x_axis='time', y_axis='mel')
+plt.title('Mel power spectrogram of '+'Two')
+plt.colorbar(format='%+02.0f dB')
+plt.tight_layout()
+```
+![Mel Power of Spectrogram]({{site.baseurl}}/assets/img/post_1/6.jpg)
+
+*[To Be Continued...]*

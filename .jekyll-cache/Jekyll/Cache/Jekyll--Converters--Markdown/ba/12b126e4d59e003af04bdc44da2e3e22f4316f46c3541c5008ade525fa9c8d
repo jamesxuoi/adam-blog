@@ -1,0 +1,203 @@
+I"�z<p>After reading one of my 2019 favourite books, <a href="https://learning.oreilly.com/library/view/tinyml/9781492052036/">‘TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers’</a> by <em>Daniel Situnayake</em> and <em>Pete Warden</em>. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I’ll introduce the concept of TinyML, why it is a giant opportunity as well as step-by-step guidance to build your personal TinyML Speech Recognition Virtual Assistant.</p>
+
+<p><img src="/assets/img/post_1/tinyml.jpg" alt="TinyML" /></p>
+
+<h3 id="1-what-is-tinyml">1. What is TinyML?</h3>
+
+<p>The ‘Tiny’ here mentions about the Ultra-Low-Power microcontrollers and ‘ML’ simply stands for Machine Learning. As a combination, TinyML is an emerging concept to run Machine Learning inference with TensorFlow Lite on the Ultra Low-Power microcontrollers such as: Arduino, Sparkfun Edge and STMicroelectronics boards.</p>
+
+<p>This ideal is developed by the OK Google team initially in 2014. They were running a 14 kilobytes (KB) deep neural networks on the digital signal processors (DSPs) present in most Android phones, which continuously listening for the “OK Google” wake words. In addition, these DSPs had only tens of kilobytes of RAM and flash memory; and these specialized chips use only a few milliwatts (mW) of power. The purpose of TinyML is for software and hardware developers who want to build embedded systems using machine learning and never worry about memory, battery or operating speed.</p>
+
+<h3 id="2-why-tinyml-is-the-future">2. Why TinyML is the future?</h3>
+
+<blockquote>
+  <p>Tiny Computers are Already Cheap and Energy Efficiency</p>
+</blockquote>
+
+<p>Microcontrollers (or MCUs) are packages containing a small CPU with possibly just a few kilobytes of RAM, and are embedded in consumer, medical, automotive and industrial devices. They are designed to use very small amounts of energy, and to be cheap enough to include in almost any object that’s sold, with average prices expected to dip below 50 cents this year. The biggest benefit for the manufacturer is that standard controllers can be programmed with software rather than requiring custom electronics for each task, so they make the manufacturing process cheaper and easier. A microcontroller itself might only use a milliwatt or even less, a coin battery might have 2,500 Joules of energy to offer, so even something drawing at one milliwatt will only last about a month. Of course most current products use duty cycling and sleeping to avoid being constantly on, but you can see what a tight budget there is even then.</p>
+
+<blockquote>
+  <p>Deep Learning Runs Well on Existing MCUs</p>
+</blockquote>
+
+<p>Microcontrollers (MCUs) tend to be less expensive than, simpler to set-up, and simpler to operate than microprocessors (MPUs). The comparatively low memory requirements (just tens or hundreds of kilobytes) also mean that lower-power SRAM or flash can be used for storage. This makes deep learning applications well-suited for microcontrollers, especially when eight-bit calculations are used instead of float, since MCUs often already have DSP-like instructions that are a good fit. This idea isn’t particularly new, both Apple and Google run always-on networks for voice recognition on these kind of chips, but not many people in either the ML or embedded world seem to realize how well deep learning and MCUs match.</p>
+
+<blockquote>
+  <p>TinyML Makes Sense of Sensor Data</p>
+</blockquote>
+
+<p>In the last few years its suddenly become possible to take noisy signals like images, audio, or accelerometers and extract meaning from them, by using neural networks. Because we can run these networks on microcontrollers, and sensors themselves use little power, it becomes possible to interpret much more of the sensor data we’re currently ignoring. For example, every morning an engineer needs to walk along the row of machines to check which will have to be taken offline for servicing. If every machine could be attached a battery-powered accelerometer and microphone that would learn usual operation and signal if there was an anomaly, you might be able to catch issues before they became real problems. There are probably a hundred products I could dream up, but running neural networks on voice recognition is the main project I’d like to explain details in this post. Let’s get it started!</p>
+
+<h3 id="3-building-tinyml-speech-recognition">3. Building TinyML Speech Recognition.</h3>
+
+<p>In the TinyML book, Peter Warden covers about the Tensorflow Lite conversion and deployment of Speech Recognition model on different microcontroller chips (source code can be found on Tensorflow Github page). However, before deployment, the detail instructions of data extraction, data analytics and model building aren’t listed there. Hence, the steps below will fully cover from extracting .wav files data to deploying neural networks on an Arduino board. (code can be found on my Github page)</p>
+
+<blockquote>
+  <p>Materials:</p>
+</blockquote>
+
+<p><em>- A laptop with Windows/ Mac/ Linux/ Ubuntu operating system.</em></p>
+
+<p><em>- An Arduino BLE board</em></p>
+
+<p><em>- Micro USB cable</em></p>
+
+<p>The audio files are collected from a research project of Google TensorFlow named ‘Simple Audio Recognition’. In detail, the archive Speech Commands data set is over 2GB and contains 36 different key words in 108,000 WAVE audio files in the list below:</p>
+
+<p>‘four’, ‘forward’, ‘off’, ‘five’, ‘on’, ‘six’, ‘down’, “house’, ‘two’, ‘visual’, ‘up’, ‘zero’, ‘three’, ‘stop’,’follow’, “happy’, ‘backward’, ‘learn’, ‘cat’, ‘right’, ‘eight’, ‘sheila’, ‘nine’, ‘yes’, ‘one’, ‘no’, ‘left’,’tree’, ‘bed’, ‘bird, ‘go’, ‘wow’, ‘seven’, ‘marvin’, ‘dog’, “background_noise’.</p>
+
+<p>This data was collected by Google and released under a CC BY license, and you can help improve it by contributing five minutes of your own voice at the on-going Open Speech Recording project. The audio file is mainly selected to be clear and clean for training purposes, therefore audio noises has been reduced or eliminated.</p>
+
+<p><img src="/assets/img/post_1/speech_recognition_overview.jpg" alt="speech_recognition_overview" /></p>
+<center>Figure 1: An overview of data distribution</center>
+
+<blockquote>
+  <p><strong>Step 1: Download and Extract</strong></p>
+</blockquote>
+
+<p>Download the speech-commands data set from <a href="https://storage.cloud.google.com/download.tensorflow.org/data/speech_commands_v0.0.2.tar.gz">here.</a></p>
+
+<p>Extract tar.gz file</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'.../data_speech_commands_v0.02.tar.gz'</span><span class="p">,</span> <span class="s">"r:gz"</span><span class="p">)</span>
+<span class="n">tar</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s">'extracting_folder_path'</span><span class="p">)</span>
+<span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Step 2: Data Analytics and Visualisation</strong></p>
+</blockquote>
+
+<p>After setting up a data pipeline to load all ‘.wav’ files, I built a function to choose randomly an audio for data analysing and visualising purposes. (You can find the project code on my <a href="https://github.com/jamesxuoi/projects/tree/master/projects/Speech%20Recognition/notes">Github page.</a>)</p>
+
+<p>In this case, ‘two’ is randomly chosen. Let’s quickly listen to it!</p>
+
+<audio src="/assets/media/617aeb6c_nohash_3.wav" controls="" preload=""></audio>
+
+<p>What you have just heard is a sound of 16 000 Hz frequencies. According to the Official Frequency Chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music’s frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of ‘Two’ in various forms.</p>
+
+<p><strong>Sound Wave Form:</strong> This is the most common seen digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave’s amplitude varies through time.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s">'audio_file'</span>
+<span class="n">fs</span><span class="p">,</span> <span class="n">signals</span> <span class="o">=</span> <span class="n">wavfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">plot_sine_wav</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">signals</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Time in Sec'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Amplitude'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Sound Waveform'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plot_sine_wav</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/post_1/1.jpg" alt="Sound_Wave_Form" /></p>
+<center>Figure 2: Sound Wave Form's amplitude varies through time</center>
+
+<p><strong>Periodogram Power Spectrum:</strong> describes the distribution of power into frequency components composing that signal. In signal processing, a periodogram is an estimate of the spectral density of a signal. One purpose of estimating the spectral density is to detect any periodicities in the data, by observing peaks at the frequencies corresponding to these periodicities.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">spectrum</span> <span class="kn">import</span> <span class="n">Periodogram</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">'font.size'</span><span class="p">:</span> <span class="mi">22</span><span class="p">})</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Periodogram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="n">p</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s">'o'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/post_1/2.jpg" alt="Periodogram Power Spectrum" /></p>
+
+<p><strong>Power Spectral Density:</strong> The power spectrum of a time serie describes the distribution of power into frequency components composing that signal.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">Pxx_spec</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">welch</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="s">'flattop'</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="s">'spectrum'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">'font.size'</span><span class="p">:</span> <span class="mi">22</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Pxx_spec</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Frequency [Hz]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Power [V RMS]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Power Spectral Density'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/post_1/2.jpg" alt="Power Spectral Density" /></p>
+
+<p><strong>Fast Fourier Transform:</strong> The “Fast Fourier Transform” (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts a signal into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the “Discrete Fourier Transformation” (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">custom_fft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fs</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">yf</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">xf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">T</span><span class="p">),</span> <span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">/</span><span class="n">N</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">yf</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span> 
+    <span class="k">return</span> <span class="n">xf</span><span class="p">,</span> <span class="n">vals</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xf</span><span class="p">,</span> <span class="n">vals</span> <span class="o">=</span> <span class="n">custom_fft</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">'font.size'</span><span class="p">:</span> <span class="mi">22</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'FFT of speaker of '</span> <span class="o">+</span><span class="s">'Two'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xf</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Frequency [Hz]'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/post_1/4.jpg" alt="Fast Fourier Transform" /></p>
+
+<p><strong>Spectrogram:</strong> is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams. A spectrogram is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_specgram</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
+    <span class="n">nperseg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">window_size</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">))</span>
+    <span class="n">noverlap</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">step_size</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">))</span>
+    <span class="n">freqs</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">spec</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span>
+                                    <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+                                    <span class="n">window</span><span class="o">=</span><span class="s">'hann'</span><span class="p">,</span>
+                                    <span class="n">nperseg</span><span class="o">=</span><span class="n">nperseg</span><span class="p">,</span>
+                                    <span class="n">noverlap</span><span class="o">=</span><span class="n">noverlap</span><span class="p">,</span>
+                                    <span class="n">detrend</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">freqs</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">spectrogram</span> <span class="o">=</span> <span class="n">log_specgram</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">'font.size'</span><span class="p">:</span> <span class="mi">19</span><span class="p">})</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">'Raw wave of '</span><span class="o">+</span><span class="s">'Two'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">'Amplitude'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">signals</span><span class="p">),</span> <span class="n">fs</span><span class="p">),</span> <span class="n">signals</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">spectrogram</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s">'auto'</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s">'lower'</span><span class="p">,</span> 
+           <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="n">times</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">times</span><span class="o">.</span><span class="nb">max</span><span class="p">(),</span> <span class="n">freqs</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">freqs</span><span class="o">.</span><span class="nb">max</span><span class="p">()])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">freqs</span><span class="p">[::</span><span class="mi">16</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">times</span><span class="p">[::</span><span class="mi">16</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">'Spectrogram of '</span><span class="o">+</span><span class="s">'two'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">'Freqs in Hz'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">'Seconds'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/img/post_1/5.jpg" alt="Spectrogram" /></p>
+
+<p><strong>Mel-frequency cepstrum Spectrogram:</strong> is a representation of the short-term power spectrum of ‘two’, based on a linear cosine transform of a log power spectrum on a nonlinear mel scale of frequency.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">librosa</span>
+<span class="kn">import</span> <span class="nn">librosa.display</span>
+<span class="n">y</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">melspectrogram</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sr</span><span class="p">,</span> <span class="n">n_mels</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+<span class="c1"># Convert to log scale (dB). We'll use the peak power (max) as reference.
+</span><span class="n">log_S</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">power_to_db</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="nb">max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">'font.size'</span><span class="p">:</span> <span class="mi">22</span><span class="p">})</span>
+<span class="n">librosa</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">specshow</span><span class="p">(</span><span class="n">log_S</span><span class="p">,</span> <span class="n">sr</span><span class="o">=</span><span class="n">sr</span><span class="p">,</span> <span class="n">x_axis</span><span class="o">=</span><span class="s">'time'</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="s">'mel'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Mel power spectrogram of '</span><span class="o">+</span><span class="s">'Two'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s">'</span><span class="si">%+02.0</span><span class="s">f dB'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</code></pre></div></div>
+<p><img src="/assets/img/post_1/6.jpg" alt="Mel Power of Spectrogram" /></p>
+
+<p><em>[To Be Continued…]</em></p>
+:ET
