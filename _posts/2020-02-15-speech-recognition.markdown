@@ -125,7 +125,7 @@ plt.title('Power Spectral Density')
 plt.show()
 ```
 
-![Power Spectral Density]({{site.baseurl}}/assets/img/post_1/2.jpg)
+![Power Spectral Density]({{site.baseurl}}/assets/img/post_1/3.jpg)
 
 **Fast Fourier Transform:** The "Fast Fourier Transform" (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts a signal into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the "Discrete Fourier Transformation" (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.
 
