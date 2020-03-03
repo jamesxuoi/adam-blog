@@ -1,6 +1,6 @@
-I"�"<p>After reading one of my 2019 favourite books, <a href="https://learning.oreilly.com/library/view/tinyml/9781492052036/">‘TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers’</a> by <em>Daniel Situnayake</em> and <em>Pete Warden</em>. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I’ll introduce the concept of TinyML, why it is a giant opportunity as well as step-by-step guidance to build your personal TinyML Speech Recognition Virtual Assistant.</p>
+I"�"<p>After reading one of my 2019 favourite books, <a href="https://learning.oreilly.com/library/view/tinyml/9781492052036/">‘TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers’</a> by <em>Daniel Situnayake</em> and <em>Pete Warden</em>. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I’ll introduce the concept of TinyML, why it is a giant opportunity as well as step-by-step guidance to build your personal TinyML Speech Recognition Virtual Assistant.</p>
 
-<p><img src="/assets/img/post_1/tinyml.jpg" alt="TinyML" /></p>
+<p><img src="//assets/img/post_1/tinyml.jpg" alt="TinyML" /></p>
 
 <h3 id="1-what-is-tinyml">1. What is TinyML?</h3>
 
@@ -48,7 +48,7 @@
 
 <p>This data was collected by Google and released under a CC BY license, and you can help improve it by contributing five minutes of your own voice at the on-going Open Speech Recording project. The audio file is mainly selected to be clear and clean for training purposes, therefore audio noises has been reduced or eliminated.</p>
 
-<p><img src="/assets/img/post_1/speech_recognition_overview.jpg" alt="speech_recognition_overview" /></p>
+<p><img src="//assets/img/post_1/speech_recognition_overview.jpg" alt="speech_recognition_overview" /></p>
 <center>Figure 1: An overview of data distribution</center>
 
 <blockquote>
@@ -73,13 +73,13 @@ https://storage.cloud.google.com/download.tensorflow.org/data/speech_commands_v0
 
 <p>In this case, ‘two’ is chosen. Let’s quickly listen to it!</p>
 
-<audio src="/assets/media/617aeb6c_nohash_3.wav" controls="" preload=""></audio>
+<audio src="//assets/media/617aeb6c_nohash_3.wav" controls="" preload=""></audio>
 
 <p>What you have just heard is a sound of 16 000 Hz frequencies. According to the official frequency chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music’s frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of ‘Two’ in various forms.</p>
 
 <p><strong>Sound Wave Form:</strong> This is the most common seen digital signal form, whenever a song is played then the screen of your device will automatically show the audio sound wave’s amplitude varies through time.</p>
 
-<p><img src="/assets/img/post_1/1.jpg" alt="Sound_Wave_Form" /></p>
+<p><img src="//assets/img/post_1/1.jpg" alt="Sound_Wave_Form" /></p>
 <center>Figure 2: Sound Wave Form's amplitude varies through time</center>
 
 <p><em>to be continued…</em></p>
