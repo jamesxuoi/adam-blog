@@ -1,4 +1,4 @@
-I"�z<p>After reading one of my 2019 favourite books, <a href="https://learning.oreilly.com/library/view/tinyml/9781492052036/">‘TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers’</a> by <em>Daniel Situnayake</em> and <em>Pete Warden</em>. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I’ll introduce the concept of TinyML, why it is a giant opportunity as well as step-by-step guidance to build your personal TinyML Speech Recognition Virtual Assistant.</p>
+I"�y<p>After reading one of my 2019 favourite books, <a href="https://learning.oreilly.com/library/view/tinyml/9781492052036/">‘TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers’</a> by <em>Daniel Situnayake</em> and <em>Pete Warden</em>. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I’ll introduce the concept of TinyML, why it is a giant opportunity as well as sharing step-by-step guide to build yourself a personal TinyML Speech Recognition Virtual Assistant.</p>
 
 <p><img src="/assets/img/post_1/tinyml.jpg" alt="TinyML" /></p>
 
@@ -76,7 +76,7 @@
 
 <p>What you have just heard is a sound of 16 000 Hz frequencies. According to the Official Frequency Chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music’s frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of ‘Two’ in various forms.</p>
 
-<p><strong>Sound Wave Form:</strong> This is the most common seen digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave’s amplitude varies through time.</p>
+<p><strong>Sound Wave Form:</strong> This is the most common digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave’s amplitude varies through time.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
@@ -122,9 +122,9 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p><img src="/assets/img/post_1/2.jpg" alt="Power Spectral Density" /></p>
+<p><img src="/assets/img/post_1/3.jpg" alt="Power Spectral Density" /></p>
 
-<p><strong>Fast Fourier Transform:</strong> The “Fast Fourier Transform” (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts a signal into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the “Discrete Fourier Transformation” (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.</p>
+<p><strong>Fast Fourier Transform:</strong> The “Fast Fourier Transform” (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts the signal of ‘two’ into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the “Discrete Fourier Transformation” (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">custom_fft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
     <span class="n">T</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fs</span>
@@ -147,7 +147,7 @@
 
 <p><img src="/assets/img/post_1/4.jpg" alt="Fast Fourier Transform" /></p>
 
-<p><strong>Spectrogram:</strong> is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams. A spectrogram is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams.</p>
+<p><strong>Spectrogram:</strong> is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal of ‘two’. In addition, spectrograms are sometimes called sonographs, voiceprints, or voicegrams.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">log_specgram</span><span class="p">(</span><span class="n">audio</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                  <span class="n">step_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>

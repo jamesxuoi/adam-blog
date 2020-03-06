@@ -1,0 +1,91 @@
+I"c"<p>It has been a while since I published my 1st post, ‘speech recognition, part 1’. Before finishing writing part 2, I’d like to freshen up my blog with a mini Data Science project, ‘Slack Data Scraping’ from scartch for beginners with no experience required.</p>
+
+<p>On the final day of my Data Science course, our class were invited out and got treated delicious milk shakes by our Lead Trainer, Dr Chaintanya Rao, an ex-Data Scientist &amp; Researcher at IBM and Testra, he is going to be the lecturer at Melbourne University, Top 1 University in Australia next couple of months (A big congrats to you again if you are reading this post!). While waiting for our milk shakes to get done, Chaitanya asked for a volunteer to scrape all data off our Priviate Slack channel, where we often shared and stored our learning materials. Even though I have only done data scraping for once or twice, while waiting for a hand to raise in an odd almost sphere with eyes avoided looking at each others, I decided to raise my hand and take the job to enhance my data scraping skill, and thats how I started the project.</p>
+
+<blockquote>
+  <p><strong>What is Data Scraping?</strong></p>
+</blockquote>
+
+<p><img src="/assets/img/post_2/Data-Scraping.jpg" alt="Data Scraping" /></p>
+
+<p>Data scraping refers to a technique in which a computer program extracts data from output generated from another program. Data scraping is commonly manifest in web scraping, the process of using an application to extract valuable information from a website.</p>
+
+<blockquote>
+  <p><strong>Slack Data Scrapping</strong></p>
+</blockquote>
+
+<p>Slack is a cloud-based instant messaging application, which is commonly used as a communication platform between co-workers. There are 3 types of channel: Public channels, Private channels, Direct messages. This post introduces how to scrape data off a Slack Private channel.</p>
+
+<p>Before going through the steps below, it is a MUST to have a Slack account, which has joined at least 1 Slack Channel in order to start scraping data. If not, you need to complete it before continuing reading.</p>
+
+<h3 id="1-signing-in-your-current-slack-account--go-to-httpsapislackcomapps--click-on-create-new-app">1. Signing in your current Slack account &gt; Go to <a href="https://api.slack.com/apps">‘https://api.slack.com/apps’</a> &gt; Click on ‘Create New App’.</h3>
+
+<p><img src="/assets/img/post_2/1.jpg" alt="Data Scraping" /></p>
+
+<h3 id="2-filling-up-your-app_name-and-choose-the-current-slack-work-space-where-contains-the-channel-that-youd-like-to-scrap-data-from">2. Filling up your ‘App_Name’ and choose the current ‘Slack Work Space’, where contains the channel that you’d like to scrap data from.</h3>
+
+<p><img src="/assets/img/post_2/2.jpg" alt="Data Scraping" /></p>
+
+<h3 id="3-go-to-oauth--permissions--under-scopes-click-on-add-an-oauth-scope-to-user-token-scopes">3. Go to ‘OAuth &amp; Permissions’ &gt; Under ‘Scopes’, click on ‘Add an OAuth Scope’ to ‘User Token Scopes’.</h3>
+
+<p><img src="/assets/img/post_2/4.jpg" alt="Data Scraping" /></p>
+
+<h3 id="scroll-up-and-click-install-app-to-work-space">Scroll up and click ‘Install App to Work space’.</h3>
+
+<p><img src="/assets/img/post_2/5.jpg" alt="Data Scraping" /></p>
+
+<h3 id="your-oauth-access-token-and-bot-user-oauth-access-token-will-be-automatically-generated-copy-and-paste-it-to-a-txt-file-then-save-it-to-somewhere-safe">Your ‘OAuth Access Token’ and ‘Bot User OAuth Access Token’ will be automatically generated. Copy and paste it to a txt file; then save it to somewhere safe!</h3>
+
+<p><img src="/assets/img/post_2/6.jpg" alt="Data Scraping" /></p>
+
+<ul>
+  <li>To find out more about the permission of each OAuth Scope, you can copy and paste the scope’s name on the search bar of <a href="https://api.slack.com/#read_the_docs">Slack Documentation page</a> for more information.</li>
+</ul>
+
+<h3 id="4-install-python-slack-client-package-with-pip-install-slackclient-find-out-more-about-documentation-of-the-library-here">4. Install python ‘Slack Client’ package with ‘pip install slackclient’, find out more about documentation of the library <a href="https://pypi.org/project/slackclient/">here</a></h3>
+
+<p><img src="/assets/img/post_2/7.jpg" alt="Data Scraping" /></p>
+
+<h3 id="5-open-your-favourite-python-working-platform-jupyter-notebookspydergoogle-colabetc-in-this-post-i-use-jupyter-notebook-as-it-is-the-most-commonly-used-platform">5. Open your favourite Python working platform: Jupyter Notebook/Spyder/Google Colab/etc. In this post, I use Jupyter Notebook as it is the most commonly used platform.</h3>
+
+<h3 id="6-import-the-nesscesary-libraries-and-connect-slack-client-with-your-oauth-access-token-or-bot-user-oauth-access-token">6. Import the nesscesary libraries and connect ‘Slack Client’ with your ‘OAuth Access Token’ or ‘Bot User OAuth Access Token’.</h3>
+
+<ul>
+  <li>‘Bot User OAuth Access Token’ is commonly used for Chat Bot development. Using that token shows your App_Name on the Slack Work Space and it need to seek for permission from the channel’s admins to gain access.</li>
+  <li>‘OAuth Access Token’ allows you to scrape data without seeking for any permission if you’re already a member of the group.</li>
+</ul>
+
+<h3 id="7-scrap-the-conversations-history-on-a-specific-channel-by-inserting-the-channel-code-which-can-be-found-at-the-end-of-the-link">7. Scrap the conversation’s history on a specific channel by inserting the channel code, which can be found at the end of the link.</h3>
+
+<p><img src="/assets/img/post_2/8.jpg" alt="Data Scraping" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Connect 'Slack Client' with your 'OAuth Access Token' 
+</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'SLACK_API_TOKEN'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'OAuth_Access_Token'</span>
+<span class="n">slack_token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">"SLACK_API_TOKEN"</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SlackClient</span><span class="p">(</span><span class="n">slack_token</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">api_call</span><span class="p">(</span> <span class="s">"conversations.history"</span><span class="p">,</span><span class="n">channel</span><span class="o">=</span><span class="s">"Channel_ID"</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'messages'</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="s">'attachments'</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="covert-data-to-pandas-dataframe-then-save-it-as-csv-file-or-continue-to-perform-data-exploratory-analysis">Covert data to pandas dataframe then save it as .csv file or continue to perform data exploratory analysis.</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div></div>
+<p><img src="/assets/img/post_2/9.jpg" alt="Data Scraping" /></p>
+
+<h3 id="mini-demo-of-slack-text-visualisation">Mini Demo of Slack Text Visualisation.</h3>
+
+<p><img src="/assets/img/post_2/10.jpg" alt="Data Scraping" /></p>
+
+<ul>
+  <li>View details of the source code on my Github page <a href="">here.</a></li>
+</ul>
+
+:ET

@@ -8,7 +8,7 @@ tags: [Blog, NLP, TinyML, Machine Learning]
 author: James Xuoi # Add name author (optional)
 --- 
 
-After reading one of my 2019 favourite books, ['TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers'](https://learning.oreilly.com/library/view/tinyml/9781492052036/) by *Daniel Situnayake* and *Pete Warden*. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I'll introduce the concept of TinyML, why it is a giant opportunity as well as step-by-step guidance to build your personal TinyML Speech Recognition Virtual Assistant.
+After reading one of my 2019 favourite books, ['TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers'](https://learning.oreilly.com/library/view/tinyml/9781492052036/) by *Daniel Situnayake* and *Pete Warden*. I decided to build a TinyML project for my final Capstone at Institute of Data, where I later got hired to the Data Science Training Team instantly after presenting the Speech Recognition project. In this post, I'll introduce the concept of TinyML, why it is a giant opportunity as well as sharing step-by-step guide to build yourself a personal TinyML Speech Recognition Virtual Assistant.
 
 ![TinyML]({{site.baseurl}}/assets/img/post_1/tinyml.jpg)
 
@@ -76,7 +76,7 @@ In this case, 'two' is randomly chosen. Let's quickly listen to it!
 
 What you have just heard is a sound of 16 000 Hz frequencies. According to the Official Frequency Chart, the “perfect” human ear can hear frequencies ranging from 20Hz to 20 000 Hz. In addition, nowadays most music's frequencies can be found around 50Hz and 16 000 Hz; and the visualisations below show the Digital Signal Processing (DSP) of 'Two' in various forms.
 
-**Sound Wave Form:** This is the most common seen digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave's amplitude varies through time.
+**Sound Wave Form:** This is the most common digital signal form, whenever a song is played; the screen on your device will automatically show the audio sound wave's amplitude varies through time.
 
 ``` python
 from scipy.io import wavfile
@@ -127,7 +127,7 @@ plt.show()
 
 ![Power Spectral Density]({{site.baseurl}}/assets/img/post_1/3.jpg)
 
-**Fast Fourier Transform:** The "Fast Fourier Transform" (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts a signal into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the "Discrete Fourier Transformation" (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.
+**Fast Fourier Transform:** The "Fast Fourier Transform" (FFT) is an important measurement method in the science of audio and acoustics measurement. It converts the signal of 'two' into individual spectral components and thereby provides frequency information about the signal. FFT is an optimized algorithm for the implementation of the "Discrete Fourier Transformation" (DFT). A signal is sampled over a period of time and divided into its frequency components. These components are single sinusoidal oscillations at distinct frequencies each with their own amplitude and phase.
 
 ``` python
 def custom_fft(y, fs):
@@ -152,7 +152,7 @@ plt.show()
 
 ![Fast Fourier Transform]({{site.baseurl}}/assets/img/post_1/4.jpg)
 
-**Spectrogram:** is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams. A spectrogram is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal, spectrograms are sometimes called sonographs, voiceprints, or voicegrams.
+**Spectrogram:** is a visual representation of the spectrum of frequencies of a signal as it varies with time. When applied to an audio signal of 'two'. In addition, spectrograms are sometimes called sonographs, voiceprints, or voicegrams. 
 
 ``` python
 def log_specgram(audio, sample_rate, window_size=20,
