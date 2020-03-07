@@ -9,22 +9,24 @@ author: James Xuoi # Add name author (optional)
 urlcolor: green
 --- 
 
-It has been a while since I published my 1st post, 'speech recognition, part 1'. Before finishing writing part 2, I'd like to freshen up my blog with a mini Data Science project, 'Slack Data Scraping' from scartch for beginners with no experience required. 
+It has been a while since I published my 1st post, 'TinyML Speech Recognition for Virtual Assistant, Part 1'. Before finishing part 2, I'd like to freshen up my blog with a mini Data Science project, 'Slack Data Scraping' from scartch for beginners with no experience required. 
 
-On the final day of my Data Science course, our class were invited out and got treated delicious milk shakes by our Lead Trainer, Dr Chaintanya Rao, an ex-Data Scientist & Researcher at IBM and Testra, he is going to be the lecturer at Melbourne University, Top 1 University in Australia next couple of months (A big congrats to you again if you are reading this post!). While waiting for our milk shakes to get done, Chaitanya asked for a volunteer to scrape all data off our Priviate Slack channel, where we often shared and stored our learning materials. Even though I have only done data scraping for once or twice, while waiting for a hand to raise in an odd almost sphere with eyes avoided looking at each others, I decided to raise my hand and take the job to enhance my data scraping skill, and thats how I started the project.
+On the final day of my Data Science course, our class were invited out and got treated delicious milk shakes by our Lead Trainer, Dr Chaintanya Rao, an ex-Data Scientist & Researcher at IBM and Testra. He is going to become a lecturer at Melbourne University, Top 1 University of Australia next couple of months (A big congrats to you again if you are reading this post!). While waiting for our milk shakes to get done, Chaitanya asked for a volunteer to scrape all data off our Priviate Slack Channel, where we often shared and stored our learning materials. Even though I have only done data scraping for once or twice, while waiting for a raising hand in an odd almost sphere with eyes avoiding to look at each others, I decided to take this task upon to enhance my data scraping skill, and thats how I started the project.
 
 
 > **What is Data Scraping?**
 
 ![Data Scraping]({{site.baseurl}}/assets/img/post_2/Data-Scraping.jpg)
 
-Data scraping refers to a technique in which a computer program extracts data from output generated from another program. Data scraping is commonly manifest in web scraping, the process of using an application to extract valuable information from a website.
+Data scraping refers to a technique in which a computer program extracts data from output generated from a program. Conneting to an API or using Beautiful Soup library are the most 2 common methods for data scraping.
+
+Has anyone else scraped data in different ways? I’m curious to hear how it worked for you. Share your experiences in the comments below! 
 
 > **Slack Data Scrapping**
 
-Slack is a cloud-based instant messaging application, which is commonly used as a communication platform between co-workers. There are 3 types of channel: Public channels, Private channels, Direct messages. This post introduces how to scrape data off a Slack Private channel.  
+Slack is a cloud-based instant messaging application, which is commonly used as a communicating platform between co-workers. There are 3 types of channel: Public channels, Private channels, Direct messages. This post introduces how to **scrape data off a Slack Private channel through API.**
 
-Before going through the steps below, it is a MUST to have a Slack account, which has joined at least 1 Slack Channel in order to start scraping data. If not, you need to complete it before continuing reading.
+Before going through the steps below, it is a MUST to have a Slack account, which have joined at least 1 Slack Channel in order to start scraping data. If not, you need to complete it before continuing to read.
 
 ### 1. Signing in your current Slack account > Go to ['https://api.slack.com/apps'](https://api.slack.com/apps) > Click on 'Create New App'.
 
@@ -94,6 +96,14 @@ df = pd.DataFrame(f)
 ![Data Scraping]({{site.baseurl}}/assets/img/post_2/10.jpg)
 
    * View details of the source code on my Github page [here.]()
+
+> **Conclusion**
+
+In general, Data/ Web Scraping is not difficult if we are willing to spend time to learn the API documentation or Beautiful Soup documentation as I have scaped data from Wiki, Reddit, Twitter, Amazon E-commerce and serveral stock market websites via APIs or using Beautiful Soup. In addition, mastering regular expression (regex) is an advantage for text analysis after data extraction. 
+
+Did I miss something? If you have any extra tips, please share them in the comments below.
+
+Happy Data Analysing!
 
 
 
