@@ -1,17 +1,28 @@
-title: James Xuoi's Blog
+title: PYTHON DEVELOPER
 email: jxuoi2211@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Python Developer blog gives tutorials about basic Python programming and hands-on Python projects for beginners including web scraping, data analysis, machine learning, deep learning, NLP, Computer Vision, web app and desktop app development.
 #permalink: ':title/'
-baseurl: / # the subpath of your site, e.g. /blog
+#baseurl: / # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author settings
 author: James Xuoi's Blog # add your name
 author-pic: adam-face.jpg
-about-author: My name is James Xuoi. I’m a Data Scientist and Data Analyst, who's been working in AI & Data Science for almost 2 years.
+about-author: My name is James Xuoi. I’m a Machine Learning Engineer, Data Scientist, Software Developer and Data Science Trainer, who has been working in AI, Data Science and Software development for almost 2 years.
+
+As a seft-taught developer, I did not attend any data structure and algorithm courses in my university, I also did not have any chance to learn about the computer science foundation. I only started coding and building Machine Learning projects until the end of 2018, when I was in my 3rd year of university. 
+
+I speccialy love Maths since I was a kid, I still remember the reason I chose to enroll into an Electrical & Electronics Engineering Course was just because that is the only course offered 10 subjects of Maths in Deakin University. After few months of Univerity, I eventually did well in all Maths subjects and soon I caught the attention of Peter Huff, who was my Maths lecturer as well as the unit chair of Science faculty in Deakin University at that time. Peter offered me a parttime Maths Tutoring position in his private Maths and Musics tutoring company. After becoming a Maths tutor, I found out that I'm good at simplifying the complex problems and I have helped many students to understand their lessons much faster than before. Hence, I also worked at multiple local tutoring companies in Australia giving Maths tutorials to students of all ages via offline and online. As a result, I started my own private online English and Maths tutoring company when I was in my 2nd year of university.
+
+I only started to learn programming earnestly after I had completed my final honours project of university, it was also my first Machine Learning project - Amazon's reviews classification. I love the feeling of building stuffs with machine learning ever since, hence I decided to attend a Data Science - AI coding bootcamp after my graduation for 12 weeks - fulltime. The coding bootcamp was all about machine learning and statistics, and that how I got into Data Science. I soon became good at machine learning modelling and data analysis, so I landed a Data Analyst position at KPMG then working at ANZ as a Junior Data Scientist. I was able to build and optimise any machine learning models using scikit-learn library and deep neural networks (eg. CNN) using Tensorflow and Keras. However the work did not fulfill my desire as I didn't know how to deploy my machine learning model into production at that time. I wanted to be able to build an end to end AI robotic project or machine learning software, therefore, I started to work as a full-time Machine Learning Engineer and part-time Software Developer for multiple software startups.
+
+Beside working, I frequently attend various Hackathon events to enhance my programming skills as well as learn from Talents, who're working at Top Tech companies (eg. FAANG). I also love the ideal of sharing and helping others, therefore I created this blog in order to give free tutorials about basic Python programming and how to build hands-on Python projects form scratch including web scraping, data analysis, machine learning, deep learning, NLP, computer vision, web app and desktop app development.
+
+I hope you enjoy the materials!
+
+All the best,
+James Xuoi.
 
 # Contact links
 email: jxuoi2211@gmail.com
